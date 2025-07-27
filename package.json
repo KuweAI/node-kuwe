@@ -1,0 +1,49 @@
+{
+  "name": "@selvian-ai/node",
+  "version": "1.0.0",
+  "description": "A collection of useful utility functions for JavaScript/TypeScript projects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "lint": "eslint . --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "utilities",
+    "helpers",
+    "typescript",
+    "javascript",
+    "library",
+    "tools"
+  ],
+  "author": "Selvian AI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/node-selvian.git"
+  },
+  "homepage": "https://github.com/your-username/node-selvian#readme",
+  "bugs": {
+    "url": "https://github.com/your-username/node-selvian/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
+  }
+}

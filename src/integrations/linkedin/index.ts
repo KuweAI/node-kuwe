@@ -1,0 +1,2 @@
+export { LinkedInIntegration } from './linkedin';
+
