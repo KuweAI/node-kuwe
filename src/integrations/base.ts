@@ -18,8 +18,8 @@ export abstract class Integration implements BaseIntegration {
     abstract readonly providerConfigKey: string;
 
     constructor(
-        protected nango: Nango,
-        protected connectionId: string
+        private nango: Nango,
+        private connectionId: string
     ) { }
 
     /**
