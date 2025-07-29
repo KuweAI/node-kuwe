@@ -37,8 +37,8 @@ export abstract class Integration implements BaseIntegration {
         });
     }
 
-    public async getConnCredentials(providerConfigKey: string) {
-        const res = await this.nango.getConnection(providerConfigKey, this.connectionId);
+    public async getConnCredentials() {
+        const res = await this.nango.getConnection(this.providerConfigKey, this.connectionId);
         return res.credentials;
     }
     /**
