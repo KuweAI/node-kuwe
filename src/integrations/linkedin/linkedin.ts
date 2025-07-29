@@ -1,11 +1,20 @@
-import { Integration } from '../base';
+import { Integration, OAuth2Credentials, AuthType } from '../base';
+
 /**
  * LinkedIn integration class
  * Provides methods for interacting with LinkedIn API
  */
-export class LinkedInIntegration extends Integration {
+export class LinkedInIntegration extends Integration<OAuth2Credentials> {
   readonly name = 'linkedin';
   readonly providerConfigKey = 'linkedin';
+
+  /**
+   * Get LinkedIn access token directly with type safety
+   * No need for manual type checking!
+   */
+  public async getAccessToken(): Promise<string> {
+    return this.getAuthToken(); // TypeScript knows this returns a string
+  }
 
   public async createTextPost(text: string, visibility: "PUBLIC" | "PRIVATE" = "PUBLIC") {
     // First, get user information to extract LinkedIn user ID
