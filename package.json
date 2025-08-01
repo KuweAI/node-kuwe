@@ -1,7 +1,7 @@
 {
   "name": "@kuwe-ai/node-sdk",
   "version": "1.0.0",
-  "description": "A collection of useful utility functions for JavaScript/TypeScript projects",
+  "description": "A powerful Node.js SDK for integrating with popular APIs like Gmail, Google Sheets, LinkedIn and more through a unified, type-safe interface powered by Nango",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -17,12 +17,18 @@
     "test": "npm run build && node dist/test.js"
   },
   "keywords": [
-    "utilities",
-    "helpers",
+    "sdk",
+    "api",
+    "integrations",
+    "gmail",
+    "google-sheets",
+    "linkedin",
+    "nango",
+    "oauth",
     "typescript",
     "javascript",
     "library",
-    "tools"
+    "third-party-apis"
   ],
   "author": "Freddy",
   "license": "MIT",

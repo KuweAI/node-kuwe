@@ -1,266 +1,417 @@
-# @kuwe-ai/node
+# @kuwe-ai/node-sdk
 
-A powerful Node.js SDK for seamless API integrations with LinkedIn and Google Sheets. Built on top of Nango for robust OAuth2 authentication and proxy capabilities.
+[![npm version](https://badge.fury.io/js/%40kuwe-ai%2Fnode-sdk.svg)](https://badge.fury.io/js/%40kuwe-ai%2Fnode-sdk)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🚀 Features
+A powerful Node.js SDK for integrating with popular APIs like Gmail, Google Sheets, LinkedIn and more through a unified, type-safe interface powered by [Nango](https://nango.dev).
 
-- **LinkedIn Integration**: Create and manage LinkedIn posts programmatically
-- **Google Sheets Integration**: Read, write, and manipulate Google Sheets data
-- **OAuth2 Authentication**: Secure authentication handled via Nango
-- **TypeScript Support**: Full type safety and IntelliSense support
-- **Easy Configuration**: Simple setup with environment variables or direct configuration
+## ✨ Features
+
+- 🚀 **Unified API**: Single interface for multiple third-party services
+- 🔒 **OAuth2 Authentication**: Secure authentication powered by Nango
+- 📝 **TypeScript Support**: Full type safety and IntelliSense support
+- 🎯 **Easy Integration**: Simple, consistent API across all services
+- 🔄 **Auto Token Management**: Automatic token refresh and error handling
+- 📦 **Lightweight**: Minimal dependencies, maximum performance
+
+## 🧩 Supported Integrations
+
+| Service | Status | Features |
+|---------|--------|----------|
+| **Gmail** | ✅ | Send emails, read messages, manage labels, search, drafts |
+| **Google Sheets** | ✅ | Read/write ranges, batch operations, append data |
+| **LinkedIn** | ✅ | Profile management, posting, connections |
+
+*More integrations coming soon!*
 
 ## 📦 Installation
 
 ```bash
-npm install @kuwe-ai/node
+npm install @kuwe-ai/node-sdk
 ```
 
-## ⚙️ Setup
+## 🚀 Quick Start
 
-Before using this SDK, you'll need to set up Nango with your API credentials:
+### 1. Set up Nango
 
-1. **Set up environment variables:**
+First, create a [Nango account](https://nango.dev) and configure your integrations:
+
 ```bash
-NANGO_CONNECTION_ID=your_connection_id
-NANGO_SECRET_KEY=your_secret_key
+# Set your environment variables
+export NANGO_SECRET_KEY="your-nango-secret-key"
+export NANGO_CONNECTION_ID="your-connection-id"
 ```
 
-2. **Or configure directly in code:**
-```typescript
-import { KuweAI } from '@kuwe-ai/node';
+### 2. Initialize the SDK
 
+```typescript
+import { KuweAI } from '@kuwe-ai/node-sdk';
+
+// Initialize with environment variables
+const kuwe = new KuweAI();
+
+// Or pass configuration directly
 const kuwe = new KuweAI({
-  connectionId: 'your_connection_id',
-  secretKey: 'your_secret_key'
+  connectionId: 'your-connection-id',
+  secretKey: 'your-secret-key'
 });
 ```
 
-## 🔗 LinkedIn Integration
-
-### Create a Text Post
+### 3. Start using integrations
 
 ```typescript
-import { KuweAI } from '@kuwe-ai/node';
-
-const kuwe = new KuweAI();
-
-// Create a public LinkedIn post
-const result = await kuwe.linkedin.createTextPost(
-  "Hello LinkedIn! This post was created via the Kuwe AI SDK 🚀",
-  "PUBLIC" // or "PRIVATE"
+// Send an email with Gmail
+await kuwe.gmail.sendEmail(
+  'recipient@example.com',
+  'Hello from KuweAI!',
+  'This email was sent using the KuweAI SDK.'
 );
 
-console.log(result);
-// {
-//   success: true,
-//   data: {
-//     postId: "urn:li:share:123456789",
-//     postUrl: "https://linkedin.com/...",
-//     message: "Post created successfully"
-//   }
-// }
+// Write data to Google Sheets
+await kuwe.googleSheets.writeRange(
+  'spreadsheet-id',
+  'Sheet1!A1:B2',
+  [['Name', 'Email'], ['John Doe', 'john@example.com']]
+);
+
+// Get LinkedIn profile
+const profile = await kuwe.linkedin.getProfile();
 ```
 
-### Get Access Token
+## 📚 Detailed Usage
+
+### Gmail Integration
+
+#### Send Emails
 
 ```typescript
-const accessToken = await kuwe.linkedin.getAccessToken();
-console.log('LinkedIn Access Token:', accessToken);
+// Simple email
+await kuwe.gmail.sendEmail(
+  'recipient@example.com',
+  'Subject',
+  'Email body'
+);
+
+// Email with HTML, CC, and BCC
+await kuwe.gmail.sendEmail(
+  ['recipient1@example.com', 'recipient2@example.com'],
+  'Newsletter',
+  '<h1>Welcome!</h1><p>This is an HTML email.</p>',
+  'from@example.com', // optional sender
+  ['cc@example.com'], // CC recipients
+  ['bcc@example.com'], // BCC recipients
+  true // isHtml
+);
 ```
 
-## 📊 Google Sheets Integration
-
-### Write Data to a Range
+#### Manage Emails
 
 ```typescript
-import { KuweAI } from '@kuwe-ai/node';
+// Get inbox emails
+const emails = await kuwe.gmail.getEmails(['INBOX'], 20);
 
-const kuwe = new KuweAI();
+// Search emails
+const searchResults = await kuwe.gmail.searchEmails(
+  'from:important@company.com subject:urgent'
+);
 
-// Write data to a specific range
-const result = await kuwe.googleSheets.writeRange(
-  'your_spreadsheet_id',
-  'Sheet1!A1:D2',
+// Get email details
+const email = await kuwe.gmail.getEmailDetails('message-id');
+
+// Mark emails as read
+await kuwe.gmail.markEmailsAsRead(['msg1', 'msg2'], true);
+
+// Delete emails
+await kuwe.gmail.deleteEmails(['msg1', 'msg2']);
+```
+
+#### Draft Management
+
+```typescript
+// Create a draft
+const draft = await kuwe.gmail.createDraft(
+  'recipient@example.com',
+  'Draft Subject',
+  'Draft content'
+);
+
+// Send the draft
+await kuwe.gmail.sendDraft(draft.data.id);
+```
+
+#### Labels and Profile
+
+```typescript
+// Get all labels
+const labels = await kuwe.gmail.getLabels();
+
+// Add labels to emails
+await kuwe.gmail.addLabelsToEmails(['msg1'], ['LABEL_1']);
+
+// Get user profile
+const profile = await kuwe.gmail.getProfile();
+```
+
+### Google Sheets Integration
+
+#### Basic Operations
+
+```typescript
+// Write data to a range
+await kuwe.googleSheets.writeRange(
+  'spreadsheet-id',
+  'Sheet1!A1:C3',
   [
-    ['Name', 'Email', 'Age', 'City'],
-    ['John Doe', 'john@example.com', 30, 'New York']
+    ['Name', 'Age', 'City'],
+    ['Alice', 30, 'New York'],
+    ['Bob', 25, 'San Francisco']
   ]
 );
 
-console.log(result);
-// {
-//   success: true,
-//   data: { ... },
-//   message: "Range updated successfully"
-// }
-```
-
-### Read Data from a Range
-
-```typescript
+// Read data from a range
 const data = await kuwe.googleSheets.readRange(
-  'your_spreadsheet_id',
-  'Sheet1!A1:D10'
+  'spreadsheet-id',
+  'Sheet1!A1:C10'
 );
 
-console.log(data);
-// {
-//   success: true,
-//   data: {
-//     values: [
-//       ['Name', 'Email', 'Age', 'City'],
-//       ['John Doe', 'john@example.com', 30, 'New York']
-//     ]
-//   },
-//   message: "Range read successfully"
-// }
-```
-
-### Append New Rows
-
-```typescript
-const result = await kuwe.googleSheets.appendValues(
-  'your_spreadsheet_id',
-  'Sheet1!A:D',
-  [
-    ['Jane Smith', 'jane@example.com', 25, 'Los Angeles'],
-    ['Bob Johnson', 'bob@example.com', 35, 'Chicago']
-  ]
+// Append new rows
+await kuwe.googleSheets.appendValues(
+  'spreadsheet-id',
+  'Sheet1!A:C',
+  [['Charlie', 35, 'Chicago']]
 );
 ```
 
-### Batch Update Multiple Ranges
+#### Advanced Operations
 
 ```typescript
-const result = await kuwe.googleSheets.batchUpdate(
-  'your_spreadsheet_id',
+// Batch update multiple ranges
+await kuwe.googleSheets.batchUpdate(
+  'spreadsheet-id',
   [
     {
-      range: 'Sheet1!A1:B2',
+      range: 'Sheet1!A1:A3',
       majorDimension: 'ROWS',
-      values: [['Header 1', 'Header 2'], ['Value 1', 'Value 2']]
+      values: [['Header'], ['Data1'], ['Data2']]
     },
     {
-      range: 'Sheet1!D1:E2',
-      majorDimension: 'ROWS',
-      values: [['Header 3', 'Header 4'], ['Value 3', 'Value 4']]
+      range: 'Sheet2!B1:B2',
+      majorDimension: 'ROWS', 
+      values: [['Value1'], ['Value2']]
     }
   ]
 );
-```
 
-### Write Selectively (Skip Cells)
-
-```typescript
-// Use null to skip cells, "" to clear them
-const result = await kuwe.googleSheets.writeSelectively(
-  'your_spreadsheet_id',
-  'Sheet1!A1:C3',
+// Write selectively (skip cells with null)
+await kuwe.googleSheets.writeSelectively(
+  'spreadsheet-id',
+  'Sheet1!A1:C2',
   [
-    ['Keep this', null, 'Update this'],  // Skip middle cell
-    [null, 'New value', null],           // Only update middle cell
-    ['', 'Clear first, update second', null]  // Clear first, skip last
+    ['Keep', null, 'Update'], // null values won't overwrite existing data
+    ['New', 'Data', null]
   ]
 );
 ```
 
-## 🛠️ Advanced Configuration
-
-### Custom Configuration
+### LinkedIn Integration
 
 ```typescript
-import { KuweAI, KuweAIConfig } from '@kuwe-ai/node';
+// Get user profile
+const profile = await kuwe.linkedin.getProfile();
 
-const config: KuweAIConfig = {
-  connectionId: 'custom_connection_id',
-  secretKey: 'custom_secret_key'
-};
+// Post an update
+await kuwe.linkedin.createPost('Check out this amazing SDK!');
 
-const kuwe = new KuweAI(config);
+// Get connections
+const connections = await kuwe.linkedin.getConnections();
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+```bash
+# Required
+NANGO_SECRET_KEY=your-nango-secret-key
+NANGO_CONNECTION_ID=your-connection-id
+```
+
+### Constructor Options
+
+```typescript
+interface KuweAIConfig {
+  connectionId?: string;  // Override environment variable
+  secretKey?: string;     // Override environment variable
+}
+
+const kuwe = new KuweAI({
+  connectionId: 'custom-connection-id',
+  secretKey: 'custom-secret-key'
+});
+```
+
+## 🔧 Authentication
+
+This SDK uses [Nango](https://nango.dev) for OAuth2 authentication. You'll need to:
+
+1. **Create a Nango account** at [nango.dev](https://nango.dev)
+2. **Set up integrations** for the services you want to use
+3. **Configure OAuth apps** for each service (Gmail, Google Sheets, LinkedIn)
+4. **Get your credentials** and connection IDs from Nango dashboard
+
+### Supported Authentication Types
+
+- **OAuth2** (Gmail, Google Sheets, LinkedIn)
+- **OAuth1** (for legacy services)
+- **API Keys** (for services that support it)
+- **Basic Auth** (for simple authentication)
+
+## 📖 API Reference
+
+### KuweAI Class
+
+```typescript
+class KuweAI {
+  // Integrations
+  readonly gmail: GmailIntegration;
+  readonly googleSheets: GoogleSheetsIntegration;
+  readonly linkedin: LinkedInIntegration;
+  
+  constructor(config?: KuweAIConfig);
+}
+```
+
+### Integration Response Format
+
+All integration methods return a consistent response format:
+
+```typescript
+interface IntegrationResponse<T> {
+  success: boolean;
+  data: T;
+  message: string;
+}
 ```
 
 ### Error Handling
 
 ```typescript
 try {
-  const result = await kuwe.linkedin.createTextPost("My post content");
-  
-  if (result.success) {
-    console.log('Post created:', result.data);
-  } else {
-    console.error('Post creation failed:', result.error);
-  }
+  const result = await kuwe.gmail.sendEmail(/* ... */);
+  console.log(result.message); // "Email sent successfully"
 } catch (error) {
-  console.error('SDK Error:', error.message);
+  console.error('Failed to send email:', error.message);
 }
 ```
 
-## 📚 API Reference
+## 🛠️ Development
 
-### KuweAI Class
+### Prerequisites
 
-The main SDK class that provides access to all integrations.
+- Node.js >= 14.0.0
+- TypeScript >= 5.8.0
 
-#### Constructor
-- `new KuweAI(config?: KuweAIConfig)`
-
-#### Properties
-- `linkedin: LinkedInIntegration` - LinkedIn API methods
-- `googleSheets: GoogleSheetsIntegration` - Google Sheets API methods
-
-### LinkedIn Integration
-
-#### Methods
-- `createTextPost(text: string, visibility?: "PUBLIC" | "PRIVATE"): Promise<Response>`
-- `getAccessToken(): Promise<string>`
-
-### Google Sheets Integration
-
-#### Methods
-- `writeRange(spreadsheetId, range, values, valueInputOption?, majorDimension?): Promise<Response>`
-- `readRange(spreadsheetId, range, majorDimension?): Promise<Response>`
-- `appendValues(spreadsheetId, range, values, valueInputOption?, majorDimension?): Promise<Response>`
-- `batchUpdate(spreadsheetId, data, valueInputOption?): Promise<Response>`
-- `writeSelectively(spreadsheetId, range, values, valueInputOption?, majorDimension?): Promise<Response>`
-
-## 🔧 Requirements
-
-- Node.js 14.0.0 or higher
-- Valid Nango account with configured integrations
-- LinkedIn and/or Google Sheets API access
-
-## 📝 License
-
-MIT
-
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## 🚀 Development
+### Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-username/node-kuwe.git
+cd node-kuwe
 
 # Install dependencies
 npm install
 
-# Build the library
+# Build the project
 npm run build
-
-# Run tests
-npm test
 
 # Run linting
 npm run lint
+
+# Run tests
+npm test
 ```
 
-## 📞 Support
+### Project Structure
 
-For support and questions, please visit our [GitHub Issues](https://github.com/your-username/node-kuwe/issues).
+```
+src/
+├── app.ts              # Main KuweAI class
+├── index.ts            # Package exports
+├── integrations/       # Integration implementations
+│   ├── base.ts         # Base integration class
+│   ├── gmail/          # Gmail integration
+│   ├── google-sheets/  # Google Sheets integration
+│   ├── linkedin/       # LinkedIn integration
+│   └── index.ts        # Integration exports
+└── test.ts             # Test files
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Adding New Integrations
+
+1. **Create integration folder**: `src/integrations/your-service/`
+2. **Extend base class**: Implement `Integration<CredentialType>`
+3. **Add to exports**: Update `src/integrations/index.ts`
+4. **Add to main app**: Update `src/app.ts`
+5. **Write tests**: Add comprehensive tests
+6. **Update docs**: Add usage examples to README
+
+### Example Integration Structure
+
+```typescript
+// src/integrations/your-service/your-service.ts
+import { Integration, OAuth2Credentials } from '../base';
+
+export class YourServiceIntegration extends Integration<OAuth2Credentials> {
+  readonly name = 'your-service';
+  readonly providerConfigKey = 'your-service';
+
+  public async yourMethod(param: string) {
+    const response = await this.proxyRequest({
+      method: 'GET',
+      endpoint: `/api/endpoint/${param}`
+    });
+
+    return {
+      success: true,
+      data: response.data,
+      message: 'Operation completed successfully'
+    };
+  }
+}
+```
+
+### Guidelines
+
+- **Follow TypeScript best practices**
+- **Add comprehensive error handling**
+- **Include JSDoc comments**
+- **Write tests for new features**
+- **Update documentation**
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- 📧 **Email**: [support@kuwe.ai](mailto:support@kuwe.ai)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/your-username/node-kuwe/issues)
+- 📖 **Documentation**: [GitHub Wiki](https://github.com/your-username/node-kuwe/wiki)
+- 💬 **Discord**: [Join our community](https://discord.gg/your-invite)
+
+## 🙏 Acknowledgments
+
+- [Nango](https://nango.dev) for providing excellent OAuth infrastructure
+- [Google APIs](https://developers.google.com) for comprehensive API documentation
+- [LinkedIn API](https://developer.linkedin.com) for professional networking integration
 
 ---
 
-Made with ❤️ by [Kuwe AI](https://kuwe.ai)
+<div align="center">
+  <strong>Made with ❤️ by the KuweAI team</strong>
+</div>
