@@ -25,10 +25,10 @@ export class LinkedInIntegration extends Integration<OAuth2Credentials> {
     });
 
     if (!userInfoResponse.data?.sub) {
-      return Response.json(
-        { success: false, error: 'LinkedIn user ID not found' },
-        { status: 400 }
-      );
+      return {
+        success: false,
+        error: 'LinkedIn user ID not found'
+      };
     }
 
     const linkedInUserId = userInfoResponse.data.sub;
@@ -56,13 +56,13 @@ export class LinkedInIntegration extends Integration<OAuth2Credentials> {
       endpoint: '/v2/ugcPosts',
       data: postPayload,
     });
-    return Response.json({
+      return {
       success: true,
       data: {
         postId: postResponse.data?.id,
         postUrl: postResponse.data?.permalink,
         message: 'Post created successfully',
       },
-    });
+    };
   }
 } 

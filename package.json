@@ -1,5 +1,5 @@
 {
-  "name": "@selvian-ai/node",
+  "name": "@kuwe-ai/node-sdk",
   "version": "1.0.0",
   "description": "A collection of useful utility functions for JavaScript/TypeScript projects",
   "main": "dist/index.js",
@@ -24,15 +24,15 @@
     "library",
     "tools"
   ],
-  "author": "Selvian AI",
+  "author": "Freddy",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/node-selvian.git"
+    "url": "https://github.com/your-username/node-kuwe.git"
   },
-  "homepage": "https://github.com/your-username/node-selvian#readme",
+  "homepage": "https://github.com/your-username/node-kuwe#readme",
   "bugs": {
-    "url": "https://github.com/your-username/node-selvian/issues"
+    "url": "https://github.com/your-username/node-kuwe/issues"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -47,7 +47,9 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
+    "@googleapis/gmail": "^14.0.1",
     "@nangohq/node": "^0.64.3",
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.1",
+    "googleapis": "^154.1.0"
   }
 }

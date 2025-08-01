@@ -1,34 +1,38 @@
 import { Nango, ProxyConfiguration } from '@nangohq/node';
 import { LinkedInIntegration } from './integrations/linkedin/index';
+import { GoogleSheetsIntegration } from './integrations/google-sheets/index';
+import { GmailIntegration } from './integrations/google-mail/index';
 
 /**
- * Configuration interface for SelvianAI proxy requests
+ * Configuration interface for KuweAI proxy requests
  * Extends ProxyConfiguration but omits connectionId since it's managed internally
  */
-export interface SelvianProxyConfig extends Omit<ProxyConfiguration, 'connectionId'> {}
+export interface KuweProxyConfig extends Omit<ProxyConfiguration, 'connectionId'> {}
 
 /**
- * Configuration options for SelvianAI constructor
+ * Configuration options for KuweAI constructor
  */
-export interface SelvianAIConfig {
+export interface KuweAIConfig {
     connectionId?: string;
     secretKey?: string;
 }
 
-export class SelvianAI {
+export class KuweAI {
     nango: Nango;
     connectionId: string;
     
     // Integration instances
     public readonly linkedin: LinkedInIntegration;
+    public readonly googleSheets: GoogleSheetsIntegration;
+    public readonly gmail: GmailIntegration;
 
     /**
-     * Creates a new SelvianAI instance
+     * Creates a new KuweAI instance
      * @param config - Optional configuration object
      * @param config.connectionId - Nango connection ID (falls back to NANGO_CONNECTION_ID env var)
      * @param config.secretKey - Nango secret key (falls back to NANGO_SECRET_KEY env var)
      */
-    constructor(config: SelvianAIConfig = {}) {
+    constructor(config: KuweAIConfig = {}) {
         const connectionId = config.connectionId || process.env.NANGO_CONNECTION_ID;
         const secretKey = config.secretKey || process.env.NANGO_SECRET_KEY;
         
@@ -44,5 +48,7 @@ export class SelvianAI {
 
         // Initialize integrations
         this.linkedin = new LinkedInIntegration(this.nango, this.connectionId);
+        this.googleSheets = new GoogleSheetsIntegration(this.nango, this.connectionId);
+        this.gmail = new GmailIntegration(this.nango, this.connectionId);
     }
 }

@@ -1,5 +1,5 @@
 import { Nango } from '@nangohq/node';
-import { SelvianProxyConfig } from '../app';
+import { KuweProxyConfig } from '../app';
 
 /**
  * Authentication credential type definitions
@@ -80,8 +80,8 @@ export abstract class Integration<TCredentials extends AuthCredentials = AuthCre
     /**
      * Helper method to make proxy requests with integration-specific defaults
      */
-    protected async proxyRequest(config: Omit<SelvianProxyConfig, 'providerConfigKey'>) {
-        const fullConfig: SelvianProxyConfig = {
+    protected async proxyRequest(config: Omit<KuweProxyConfig, 'providerConfigKey'>) {
+        const fullConfig: KuweProxyConfig = {
             ...config,
             providerConfigKey: this.providerConfigKey
         };
