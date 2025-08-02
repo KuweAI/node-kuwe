@@ -47,6 +47,7 @@ pids/
 coverage/
 *.lcov
 
+src/test.ts
 # Temporary folders
 tmp/
 temp/ 

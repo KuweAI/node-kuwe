@@ -17,3 +17,4 @@ export {
 // Export integration implementations
 export { LinkedInIntegration } from './linkedin/linkedin';
 export { GmailIntegration } from './google-mail/google-mail';
+export { OpenAIIntegration } from './openai/openai';
