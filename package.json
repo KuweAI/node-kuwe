@@ -1,7 +1,7 @@
 {
   "name": "@kuwe-ai/node-sdk",
   "version": "1.0.0",
-  "description": "A powerful Node.js SDK for integrating with popular APIs like Gmail, Google Sheets, LinkedIn and more through a unified, type-safe interface powered by Nango",
+  "description": "A Node.js SDK for integrating with popular APIs like Gmail, Google Sheets, LinkedIn and more through a unified, type-safe interface powered by Nango to integrate with KuweAI platform",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -34,11 +34,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/node-kuwe.git"
+    "url": "https://github.com/KuweAI/node-kuwe.git"
   },
-  "homepage": "https://github.com/your-username/node-kuwe#readme",
+  "homepage": "https://github.com/KuweAI/node-kuwe#readme",
   "bugs": {
-    "url": "https://github.com/your-username/node-kuwe/issues"
+    "url": "https://github.com/KuweAI/node-kuwe/issues"
   },
   "engines": {
     "node": ">=14.0.0"
